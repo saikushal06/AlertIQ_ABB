@@ -3,12 +3,8 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from datetime import datetime
-import pyttsx3
 from streamlit_autorefresh import st_autorefresh
 
-engine = pyttsx3.init()
-engine.setProperty('rate', 165)
-engine.setProperty('volume', 1.0)
 st_autorefresh(interval=8000, key="live_refresh")
 
 st.set_page_config(
@@ -469,21 +465,6 @@ st.subheader("🧠 AI Incident Timeline")
 
 top_machine = df.sort_values("Risk Score", ascending=False).iloc[0]
 
-# ---------------- AI VOICE ALERT ----------------
-if "spoken" not in st.session_state:
-    st.session_state.spoken = False
-
-if top_machine["Status"] == "Critical" and not st.session_state.spoken:
-    try:
-        engine.stop()
-        engine.say("Critical industrial incident detected")
-        engine.runAndWait()
-    except:
-        pass
-    st.session_state.spoken = True
-
-if top_machine["Status"] != "Critical":
-    st.session_state.spoken = False
 
 
 if top_machine["Status"] == "Critical":
